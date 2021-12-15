@@ -4,7 +4,8 @@ import { useGlobalContext } from '../context';
 import { useNavigate } from 'react-router-dom';
 
 export const QuizList = () => {
-  const { quizes, getQuizes, loading, error } = useGlobalContext();
+  const { quizes, getQuizes, loading, error, errorMessage } =
+    useGlobalContext();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export const QuizList = () => {
   }
 
   if (error) {
-    return <h2>Connection Error, Try again later!</h2>;
+    return <h2>{errorMessage}</h2>;
   }
 
   return (

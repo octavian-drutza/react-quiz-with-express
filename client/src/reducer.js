@@ -30,7 +30,19 @@ const reducer = (state, action) => {
   }
 
   if (action.type === 'ERROR_CONNECTION') {
-    return { ...state, error: true };
+    return {
+      ...state,
+      error: action.payload.err,
+      errorMessage: action.payload.message,
+    };
+  }
+
+  if (action.type === 'LOGIN_USER') {
+    return { ...state, loggedUser: action.payload };
+  }
+
+  if (action.type === 'SET_TOKEN') {
+    return { ...state, token: action.payload };
   }
 
   throw new Error('not found action type');

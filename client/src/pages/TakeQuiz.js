@@ -10,7 +10,7 @@ export const TakeQuiz = () => {
   let navigate = useNavigate();
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState({ _id: '', title: '', data: [] });
-  const { loading, startLoading, stopLoading, setError, error } =
+  const { loading, startLoading, stopLoading, setError, error, errorMessage } =
     useGlobalContext();
   const [current, setCurrent] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
@@ -25,9 +25,10 @@ export const TakeQuiz = () => {
         const res = await axios.get(`http://localhost:5000/api/quizes/${id}`);
         setQuiz(res.data);
         stopLoading();
+        setError(false);
       } catch (error) {
         stopLoading();
-        setError();
+        setError(true, errorMessage);
       }
     };
     getQuiz(quizId);
@@ -108,7 +109,7 @@ export const TakeQuiz = () => {
   }
 
   if (error) {
-    return <h2>Connection Error, Try again later!</h2>;
+    return <h2>{errorMessage}</h2>;
   }
 
   if (quiz.data.length === 0) {

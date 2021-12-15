@@ -5,6 +5,11 @@ const quizSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
   data: [
     {
       id: {

@@ -9,18 +9,28 @@ import axios from 'axios';
 export const EditQuiz = () => {
   let navigate = useNavigate();
   const { quizId } = useParams();
-  const { updateQuiz, loading, startLoading, stopLoading, setError, error } =
-    useGlobalContext();
+  const {
+    updateQuiz,
+    loading,
+    startLoading,
+    stopLoading,
+    setError,
+    error,
+    errorMessage,
+    loggedUser,
+  } = useGlobalContext();
   const [stateQuiz, setStateQuiz] = useState({
     id: '',
     title: '',
     data: [],
+    creator: '',
   });
   const [newQuestion, setNewQuestion] = useState({
     question: '',
     type: 'multiple',
     answers: [],
   });
+  console.log(loggedUser);
 
   useEffect(() => {
     const getQuiz = async (id) => {
@@ -29,8 +39,9 @@ export const EditQuiz = () => {
         const res = await axios.get(`http://localhost:5000/api/quizes/${id}`);
         setStateQuiz(res.data);
         stopLoading();
+        setError(false);
       } catch (error) {
-        setError();
+        setError(true, errorMessage);
         stopLoading();
       }
     };
@@ -63,7 +74,6 @@ export const EditQuiz = () => {
     });
     setStateQuiz({ ...stateQuiz, data: newQuestions });
   };
-  // here maybe find a way to delete the question useing title
 
   // new question
   const addNewQuestion = () => {
@@ -94,9 +104,12 @@ export const EditQuiz = () => {
   }
 
   if (error) {
-    return <h2>Connection Error, Try again later!</h2>;
+    return <h2>{errorMessage}</h2>;
   }
 
+  if (!loggedUser || loggedUser !== stateQuiz.creator) {
+    return <h2>Wrong path, can not edit this quiz</h2>;
+  }
   return (
     <section className='quiz-edit-pg'>
       <article className='question-list'>

@@ -1,14 +1,16 @@
 const express = require('express');
 const router = new express.Router();
+const auth = require('../middleware/auth');
 const Quiz = require('../models/quiz');
 
-router.post('/api/quizes', async (req, res) => {
-  const quiz = new Quiz(req.body);
+router.post('/api/quizes', auth, async (req, res) => {
+  const quiz = new Quiz({ ...req.body, creator: req.user._id });
+
   try {
     await quiz.save();
     res.status(201).send(quiz);
   } catch (error) {
-    res.status(400).send();
+    res.status(400).send(error.message);
   }
 });
 
@@ -35,10 +37,10 @@ router.get('/api/quizes/:id', async (req, res) => {
   }
 });
 
-router.delete('/api/quizes/:id', async (req, res) => {
+router.delete('/api/quizes/:id', auth, async (req, res) => {
   const _id = req.params.id;
   try {
-    const quiz = await Quiz.findOneAndDelete({ _id });
+    const quiz = await Quiz.findOneAndDelete({ _id, creator: req.user._id });
     if (!quiz) {
       return res.status(404).send();
     }
@@ -48,11 +50,11 @@ router.delete('/api/quizes/:id', async (req, res) => {
   }
 });
 
-router.patch('/api/quizes/:id', async (req, res) => {
+router.patch('/api/quizes/:id', auth, async (req, res) => {
   const _id = req.params.id;
   const updates = Object.keys(req.body).filter((key) => key !== '_id');
   try {
-    const quiz = await Quiz.findOne({ _id });
+    const quiz = await Quiz.findOne({ _id, creator: req.user._id });
     if (!quiz) {
       return res.status(404).send();
     }

@@ -64,7 +64,10 @@ h3 {
 .del-quiz-btn,
 .take-quiz-btn,
 .submit-changes-btn,
-.back-to-quizes-btn {
+.back-to-quizes-btn,
+.register-btn,
+.login-btn,
+.logout-btn {
   text-transform: uppercase;
   background: #2680c0;
   color: #fff;
@@ -164,11 +167,22 @@ h3 {
 .add-question-type,
 .add-question-input,
 .change-title-input,
-.quiz-title-input {
+.quiz-title-input,
+.credentials-input {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.5rem;
   width: 50vw;
+}
+
+.credentials-input {
+  width: 25vw;
+  margin-left: 1rem;
+}
+
+.login-group,
+.register-group {
+  margin-left: 1rem;
 }
 
 .add-answer-group,
@@ -242,6 +256,12 @@ button:hover {
   transform: scale(1.05);
 }
 
+.navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 @media screen and (max-width: 550px) {
   .edit-input,
   .edit-type,
@@ -249,7 +269,8 @@ button:hover {
   .add-question-type,
   .add-question-input,
   .change-title-input,
-  .quiz-title-input {
+  .quiz-title-input,
+  .credentials-input {
     width: 70vw;
   }
 }
